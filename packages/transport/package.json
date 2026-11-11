@@ -1,6 +1,6 @@
 {
   "name": "@fastrd/harness-transport",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Bounded JSONL RPC transport with awaited CLI process cleanup for Node.js hosts.",
   "type": "module",
   "license": "MIT",
