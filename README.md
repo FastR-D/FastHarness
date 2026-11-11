@@ -1,5 +1,8 @@
 # FastHarness
 
+Published package: `npm install @fastrd/harness-transport@0.1.2`.
+See [RELEASING.md](RELEASING.md) for the verified automatic tag release path.
+
 ## Automated npm releases
 
 Update `packages/transport/package.json` and its lockfile, test, commit, and push
