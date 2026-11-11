@@ -1,0 +1,50 @@
+name: Publish npm transport
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+    defaults:
+      run:
+        working-directory: packages/transport
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - name: Verify release source and toolchain
+        run: |
+          git fetch origin main:refs/remotes/origin/main
+          node --version
+          npm --version
+          node -e "const v=require('child_process').execSync('npm --version',{encoding:'utf8'}).trim().split('.').map(Number); if(v[0]<11 || (v[0]===11 && (v[1]<5 || (v[1]===5 && v[2]<1)))) throw new Error('npm >=11.5.1 required')"
+          node scripts/release.mjs --check-source
+      - run: npm ci --registry=https://registry.npmjs.org
+      - run: npm test
+      - run: mkdir -p artifacts && npm pack --pack-destination artifacts
+      - name: Verify final archive in an external consumer
+        run: npm exec --offline --call "node scripts/verify.mjs"
+      - name: Publish original archive using OIDC
+        run: npm run publish:tag
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: npm-publication-evidence
+          path: packages/transport/artifacts/

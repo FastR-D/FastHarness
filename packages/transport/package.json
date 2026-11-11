@@ -1,16 +1,19 @@
 {
   "name": "@fastrd/harness-transport",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "description": "Bounded JSONL RPC transport with awaited CLI process cleanup for Node.js hosts.",
   "type": "module",
   "license": "MIT",
   "repository": { "type": "git", "url": "git+https://github.com/FastR-D/FastHarness.git", "directory": "packages/transport" },
   "engines": { "node": ">=22" },
-  "files": ["dist", "README.md"],
+  "publishConfig": { "access": "public", "registry": "https://registry.npmjs.org/" },
+  "files": ["dist", "LICENSE", "README.md"],
   "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "test": "npm run build && node --test tests/*.test.mjs",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "publish:tag": "node scripts/publish.mjs"
   },
   "devDependencies": { "@types/node": "^22.0.0", "typescript": "^5.7.3" }
 }
