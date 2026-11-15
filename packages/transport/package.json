@@ -15,5 +15,5 @@
     "prepack": "npm run build",
     "publish:tag": "node scripts/publish.mjs"
   },
-  "devDependencies": { "@types/node": "^22.0.0", "typescript": "^5.7.3" }
+  "devDependencies": { "@types/node": "^26.6.6", "typescript": "^7.0.2" }
 }
